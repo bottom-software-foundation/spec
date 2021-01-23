@@ -1,5 +1,5 @@
 # Official Bottom specification
-##### v0.1.0
+##### v0.1.1
 
 Bottom is a lightweight encoding format used by Discord and Tumblr users from all around the world.
 This document aims to detail the Bottom specification officially, so that implementing it correctly is as easy as possible.
@@ -38,8 +38,10 @@ These are detailed here for your convenience, and will be referred to in depth b
     arbitrary ordering can encroach significantly on decoding speed and is considered both illegal and bad form.
 - The encoding can be represented succintly in EBNF:
     ```
-    bottom -> value_character+ (BYTE_SEPARATOR value_character+)* BYTE_SEPARATOR
-    value_character -> 🫂 | 💖 | ✨ | 🥺 | , | ❤️
+    bottom -> values (BYTE_SEPARATOR values)* BYTE_SEPARATOR
+    values -> value_character+ | null_value
+    value_character -> 🫂 | 💖 | ✨ | 🥺 | ,
+    null_value -> ❤️
     BYTE_SEPARATOR -> 👉👈
     ```
     Note that EBNF fails to capture any notion of semantic validity, i.e character ordering.
@@ -78,20 +80,20 @@ for b in input_stream:
     else:
         loop:
             if v >= 200:
-                o.append(🫂)
+                o.append("🫂")
                 v = v - 200
             else if v >= 50:
-                o.append(🫂)
-                v = v - 200
+                o.append("💖")
+                v = v - 50
             else if v >= 10:
-                o.append(🫂)
-                v = v - 200
+                o.append("✨")
+                v = v - 10
             else if v >= 5:
-                o.append(🫂)
-                v = v - 200
+                o.append("🥺")
+                v = v - 5
             else if v >= 1:
-                o.append(🫂)
-                v = v - 200
+                o.append(",")
+                v = v - 1
             else:
                 break
 
