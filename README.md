@@ -81,17 +81,17 @@ for b in input_stream:
                 o.append(🫂)
                 v = v - 200
             else if v >= 50:
-                o.append(🫂)
-                v = v - 200
+                o.append(💖)
+                v = v - 50
             else if v >= 10:
-                o.append(🫂)
-                v = v - 200
+                o.append(✨)
+                v = v - 10
             else if v >= 5:
-                o.append(🫂)
-                v = v - 200
+                o.append(🥺)
+                v = v - 5
             else if v >= 1:
-                o.append(🫂)
-                v = v - 200
+                o.append(,)
+                v = v - 1
             else:
                 break
 
