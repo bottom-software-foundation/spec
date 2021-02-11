@@ -1,5 +1,5 @@
 # Official Bottom specification
-##### v0.1.1
+##### v0.2.0
 
 Bottom is a lightweight encoding format used by Discord and Tumblr users from all around the world.
 This document aims to detail the Bottom specification officially, so that implementing it correctly is as easy as possible.
@@ -17,7 +17,7 @@ These are detailed here for your convenience, and will be referred to in depth b
 | `U+1F97A`             | 🥺         | Integer 5    |
 | `U+002C`              | ,          | Integer 1    |
 | `U+2764`, `U+FE0F`    | ❤️         | Integer 0    |
-                                                    
+
 ### Special characters
 | Unicode escape(s)     | Character  | Purpose          |
 |-----------------------|------------|------------------|
@@ -50,6 +50,7 @@ These are detailed here for your convenience, and will be referred to in depth b
 - Byte separators that do not follow a group of value characters are illegal, i.e `💖💖,,,,👉👈👉👈`
     or `👉👈💖💖,,,,👉👈`. As such, `👉👈` alone is illegal.
 - Groups of value characters must be followed by a byte separator. `💖💖,,,,` alone is illegal, but `💖💖,,,,👉👈` is valid.
+- The null value must be followed by a byte separator. `💖💖,,,,👉👈❤️👉👈💖💖,,,,👉👈` and `💖💖,,,,👉👈❤️👉👈` are valid, but `💖💖,,,,👉👈❤️` alone is illegal.
 
 ## Notes on decoding
 - Decoding is quite simple and there aren't many special considerations to be made.
@@ -76,7 +77,7 @@ for b in input_stream:
     let o = new string
 
     if v is 0:
-        o.append(❤️)
+        o.append("❤️")
     else:
         loop:
             if v >= 200:
@@ -97,7 +98,7 @@ for b in input_stream:
             else:
                 break
 
-        o.append(👉👈)
+    o.append("👉👈")
 
 return o
 ```
