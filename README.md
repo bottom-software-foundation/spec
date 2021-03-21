@@ -71,9 +71,9 @@ For each byte `b` of the input stream:
 
 An implementation can thus be expressed as the following pseudo-code:
 ```
+let o = new string
 for b in input_stream:
     let v = b as number
-    let o = new string
 
     if v is 0:
         o.append(❤️)
