@@ -21,11 +21,11 @@ These are detailed here for your convenience, and will be referred to in depth b
 ### Special characters
 | Unicode escape(s)     | Character  | Purpose          |
 |-----------------------|------------|------------------|
-| `U+1F449`, `U+1F448`  | 👉👈      | Byte separator    |
+| `U+1F449`, `U+1F448`  | 👉👈      | Byte terminator   | 
 
 ## Notes on encoding
 - The input stream must be valid UTF-8 encoded text. Encoding invalid UTF-8 is illegal.
-- The output stream will be a sequence of groups of value characters (see table above) with each group separated by the byte separator character, i.e
+- The output stream will be a sequence of groups of value characters (see table above) with each group terminated by the byte terminator character, i.e
     ```
     💖✨✨✨👉👈💖💖🥺,,,👉👈💖💖,👉👈💖✨✨✨✨🥺,,👉👈💖💖✨🥺👉👈💖💖,👉👈💖✨,,,👉👈
     ```
@@ -38,19 +38,19 @@ These are detailed here for your convenience, and will be referred to in depth b
     arbitrary ordering can encroach significantly on decoding speed and is considered both illegal and bad form.
 - The encoding can be represented succintly in EBNF:
     ```
-    bottom -> values (BYTE_SEPARATOR values)* BYTE_SEPARATOR
+    bottom -> values (BYTE_TERMINATOR values)* BYTE_TERMINATOR
     values -> value_character+ | null_value
     value_character -> 🫂 | 💖 | ✨ | 🥺 | ,
     null_value -> ❤️
-    BYTE_SEPARATOR -> 👉👈
+    BYTE_TERMINATOR -> 👉👈
     ```
     Note that EBNF fails to capture any notion of semantic validity, i.e character ordering.
     It's technically possible to encode character ordering rules into the grammar, but that is not shown here
     for the sake of brevity and simplicity.
-- Byte separators that do not follow a group of value characters are illegal, i.e `💖💖,,,,👉👈👉👈`
+- Byte terminators that do not follow a group of value characters are illegal, i.e `💖💖,,,,👉👈👉👈`
     or `👉👈💖💖,,,,👉👈`. As such, `👉👈` alone is illegal.
-- Groups of value characters must be followed by a byte separator. `💖💖,,,,` alone is illegal, but `💖💖,,,,👉👈` is valid.
-- The null value must be followed by a byte separator. `💖💖,,,,👉👈❤️👉👈💖💖,,,,👉👈` and `💖💖,,,,👉👈❤️👉👈` are valid, but `💖💖,,,,👉👈❤️` alone is illegal.
+- Groups of value characters must be followed by a byte terminator. `💖💖,,,,` alone is illegal, but `💖💖,,,,👉👈` is valid.
+- The null value must be followed by a byte terminator. `💖💖,,,,👉👈❤️👉👈💖💖,,,,👉👈` and `💖💖,,,,👉👈❤️👉👈` are valid, but `💖💖,,,,👉👈❤️` alone is illegal.
 
 ## Notes on decoding
 - Decoding is quite simple and there aren't many special considerations to be made.
@@ -68,7 +68,7 @@ For each byte `b` of the input stream:
     - Find the largest value character (see table above) where the relationship `v >= character_value` is satisfied. Let this be `character_value`.
     - Push the Unicode scalar values corresponding to `character_value` to `o`.
     - Subtract `character_value` from `v`.
-- Push the Unicode scalar values representing the byte separator to `o`.
+- Push the Unicode scalar values representing the byte terminator to `o`.
 
 An implementation can thus be expressed as the following pseudo-code:
 ```
